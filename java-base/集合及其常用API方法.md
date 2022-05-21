@@ -106,6 +106,10 @@ BigDecima常用API
 | public BigDecimal divide(BigDecimal b)                       | 除法 |
 | public BigDecimal divide (另一个BigDecimal对象，精确几位，舍入模式) | 除法 |
 
+BigDecimal 转化为Double 的方法：
+
+double money = BigDecimal.valueOf( 0.1 ).doubelValue();
+
 ```
 BigDecimal的作用是什么？
 解决浮点型运算精度失真问题。
@@ -591,7 +595,7 @@ Arrays.sort(ages, ( o1,  o2) -> o2 - o1 );
 
 # Collection集合特点
 
-<img src="D:\桌面文件\java基础\collection.png" alt="colloction" style="zoom: 67%;" />
+<img src="image/collection.png" alt="colloction" style="zoom: 67%;" />
 
 - List系列集合：添加的元素是有序、可重复、有索引。
   - ArrayList、LinekdList ：有序、可重复、有索引。
