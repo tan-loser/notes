@@ -55,6 +55,42 @@
   File file3 = new File(“模块名\\a.txt”); 
   ```
 
+```java
+public static void main(String[] args) {
+        // 1、创建File对象（指定了文件的路径）
+        // 路径写法： D:\resources\xueshan.jpeg
+        //          D:/resources/xueshan.jpeg
+        //          File.separator
+    
+    //方法一：
+        File f = new File("D:\\resources\\xueshan.jpeg");
+    //方法二：
+        File f = new File("D:/resources/xueshan.jpeg");
+    //方法三：
+        File f = new File("D:" + File.separator+"resources"+ File.separator +"xueshan.jpeg");
+    
+        long size = f.length(); // 是文件的字节大小
+        System.out.println(size);
+
+        // 2、File创建对象，支持绝对路径 支持相对路径（重点）
+        File f1 = new File("D:\\resources\\beauty.jpeg"); // 绝对路径
+        System.out.println(f1.length());
+
+        // 相对路径：一般定位模块中的文件的。 相对到工程下！！
+        File f2 = new File("file-io-app/src/data.txt");
+        System.out.println(f2.length());
+
+        // 3、File创建对象 ，可以是文件也可以是文件夹
+        File f3 = new File("D:\\resources");
+        System.out.println(f3.exists()); // 判断这个路径是否存在，这个文件夹存在否
+
+    }
+```
+
+
+
+
+
 
 
 ## File类的常用API
@@ -70,6 +106,27 @@
 | public String getPath()         | 将此抽象路径名转换为路径名字符串           |
 | public String getName()         | 返回由此抽象路径名表示的文件或文件夹的名称 |
 | public long lastModified()      | 返回文件最后修改的时间毫秒值               |
+
+```java
+File f2 = new File("file-io-app\\src\\data.txt");
+        // a.获取它的绝对路径。
+        System.out.println(f2.getAbsolutePath());
+        // b.获取文件定义的时候使用的路径。
+        System.out.println(f2.getPath());
+        // c.获取文件的名称：带后缀。
+        System.out.println(f2.getName());
+        // d.获取文件的大小：字节个数。
+        System.out.println(f2.length()); // 字节大小
+        // e.获取文件的最后修改时间
+        long time1 = f2.lastModified();
+        System.out.println("最后修改时间：" + new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(time1));
+        // f、判断文件是文件还是文件夹
+        System.out.println(f2.isFile()); // true
+        System.out.println(f2.isDirectory()); // false
+        System.out.println(f2.exists()); // true
+```
+
+
 
 **创建文件、删除文件功能**
 
@@ -90,6 +147,39 @@ File类删除文件的功能
 - delete方法默认只能删除文件和空文件夹。默认不能删除非空文件夹。
 - delete方法直接删除不走回收站
 
+```java
+public static void main(String[] args) throws IOException {
+        File f = new File("file-io-app\\src\\data.txt");
+        // a.创建新文件，创建成功返回true ,反之 ,不需要这个，以后文件写出去的时候都会自动创建
+        System.out.println(f.createNewFile());
+        File f1 = new File("file-io-app\\src\\data02.txt");
+        System.out.println(f1.createNewFile()); // （几乎不用的，因为以后文件都是自动创建的！）
+
+        // b.mkdir创建一级目录
+        File f2 = new File("D:/resources/aaa");
+        System.out.println(f2.mkdir());
+
+        // c.mkdirs创建多级目录(重点)
+        File f3 = new File("D:/resources/ccc/ddd/eee/ffff");
+//        System.out.println(f3.mkdir());
+        System.out.println(f3.mkdirs()); // 支持多级创建
+
+        // d.删除文件或者空文件夹
+        System.out.println(f1.delete());
+        File f4 = new File("D:/resources/xueshan.jpeg");
+        System.out.println(f4.delete()); 
+    
+    	// 占用一样可以删除,当其它应用在用的文件也可以删除
+        // 只能删除空文件夹,不能删除非空文件夹.
+        File f5 = new File("D:/resources/aaa");
+        System.out.println(f5.delete());
+    }
+```
+
+
+
+
+
 **遍历文件夹**
 
 File类的遍历功能
@@ -108,25 +198,138 @@ listFiles方法注意事项：
 5. 当调用者是一个有隐藏文件的文件夹时，将里面所有文件和文件夹的路径放在File数组中返回，包含隐藏内容
 6. 当调用者是一个需要权限才能进入的文件夹时，返回null
 
+```java
+// 1、定位一个目录
+File f1 = new File("D:/resources");
+String[] names = f1.list();
+for (String name : names) {
+    System.out.println(name);
+}
+
+// 2.一级文件对象
+// 获取当前目录下所有的"一级文件对象"到一个文件对象数组中去返回（重点）
+File[] files = f1.listFiles();
+for (File f : files) {
+    System.out.println(f.getAbsolutePath());
+}
+
+// 注意事项
+File dir = new File("D:/resources/ddd");
+File[] files1 = dir.listFiles();
+System.out.println(Arrays.toString(files1));
+```
+
+
+
+
+
 
 
 # 方法递归的应用
+
+
 
 **文件搜索**
 
 分析：
 
 1. 先定位出的应该是一级文件对象
+
 2. 遍历全部一级文件对象，判断是否是文件
+
 3. 如果是文件，判断是否是自己想要的
+
 4. 如果是文件夹，需要继续递归进去重复上述过程
+
+   ```java
+   public static void main(String[] args) {
+           // 2、传入目录 和  文件名称
+           searchFile(new File("D:/") , "eDiary.exe");
+       }
+   
+       /**
+        * 1、搜索某个目录下的全部文件，找到我们想要的文件。
+        * @param dir  被搜索的源目录
+        * @param fileName 被搜索的文件名称
+        */
+       public static void searchFile(File dir,String fileName){
+           // 3、判断dir是否是目录
+           if(dir != null && dir.isDirectory()){
+               // 可以找了
+               // 4、提取当前目录下的一级文件对象
+               File[] files = dir.listFiles(); // null  []
+               // 5、判断是否存在一级文件对象，存在才可以遍历
+               if(files != null && files.length > 0) {
+                   for (File file : files) {
+                       // 6、判断当前遍历的一级文件对象是文件 还是 目录
+                       if(file.isFile()){
+                           // 7、是不是咱们要找的，是把其路径输出即可
+                           if(file.getName().contains(fileName)){
+                               System.out.println("找到了：" + file.getAbsolutePath());
+                               // 启动它。
+                               try {
+                                   Runtime r = Runtime.getRuntime();
+                                   r.exec(file.getAbsolutePath());
+                               } catch (IOException e) {
+                                   e.printStackTrace();
+                               }
+                           }
+                       }else {
+                           // 8、是文件夹，需要继续递归寻找
+                           searchFile(file, fileName);
+                       }
+                   }
+               }
+           }else {
+               System.out.println("对不起，当前搜索的位置不是文件夹！");
+           }
+       }
+   ```
+
+   
 
 **删除非空文件夹**
 
 分析：
 
 1. File默认不可以删除非空文件夹
+
 2. 我们需要遍历文件夹，先删除里面的内容，再删除自己。
+
+   ```java
+   public static void main(String[] args) {
+       deleteDir(new File("D:/new"));
+   }
+   
+   /**
+      删除文件夹，无所谓里面是否有内容，都可以删除
+    * @param dir
+    */
+   public static void deleteDir(File dir){
+       // 1、判断dir存在且是文件夹
+       if(dir != null && dir.exists() && dir.isDirectory()){
+           // 2、提取一级文件对象。
+           File[] files = dir.listFiles();
+           // 3、判断是否存在一级文件对象，存在则遍历全部的一级文件对象去删除
+           if(files != null && files.length > 0){
+               // 里面有内容
+               for (File file : files) {
+                   // 4、判断file是文件还是文件夹，文件直接删除
+                   if(file.isFile()){
+                       file.delete();
+                   }else {
+                       // 递归删除
+                       deleteDir(file);
+                   }
+               }
+           }
+           // 删除自己
+           dir.delete();
+       }
+   }
+   ```
+
+   
 
 **拷贝文件**
 
@@ -136,6 +339,8 @@ listFiles方法注意事项：
 
 1. IO默认不可以拷贝文件夹
 2. 我们需要遍历文件夹，如果是文件则拷贝过去，如果是文件夹则要进行1-1创建，再递归。
+
+
 
 
 
@@ -204,6 +409,29 @@ String解码
 | String(byte[] bytes)  | 通过使用平台的默认字符集解码指定的字节数组来构造新的 String |
 | String(byte[] bytes, String charsetName) | 通过指定的字符集解码指定的字节数组来构造新的 String         |
 
+```java
+public static void main(String[] args) throws Exception {
+    // 1、编码：把文字转换成字节（使用指定的编码）
+    String name = "abc我爱你中国";
+    
+    // byte[] bytes = name.getBytes(); // 以当前代码默认字符集进行编码 （UTF-8）
+    byte[] bytes = name.getBytes("GBK"); // 指定编码
+    
+    System.out.println(bytes.length);
+    System.out.println(Arrays.toString(bytes));
+
+    // 2、解码：把字节转换成对应的中文形式（编码前 和 编码后的字符集必须一致，否则乱码 ）
+    // String rs = new String(bytes); // 默认的UTF-8
+    String rs = new String(bytes, "GBK"); // 指定GBK解码
+    
+    System.out.println(rs);
+}
+```
+
+
+
+
+
 
 
 # IO流概述
@@ -230,6 +458,14 @@ IO流概述
 
 ![IO流体系](image\IO体系.png)
 
+```
+IO流的体系：
+             字节流                                   字符流
+    字节输入流            字节输出流               字符输入流        字符输出流
+    InputStream          OutputStream           Reader           Writer  (抽象类)
+    FileInputStream      FileOutputStream       FileReader       FileWriter(实现类，可以使用的)
+```
+
 ## 文件字节输入流
 
 1. **每次读取一个字节**
@@ -255,6 +491,34 @@ IO流概述
 
 ​		
 
+```java
+public static void main(String[] args) throws Exception {
+        // 1、创建一个文件字节输入流管道与源文件接通。
+        InputStream is = new FileInputStream(new File("file-io-app\\src\\data.txt"));
+        // 简化写法
+        InputStream is = new FileInputStream("file-io-app\\src\\data.txt");
+
+        // 2、读取一个字节返回 （每次读取一滴水）
+//        int b1 = is.read();
+//        System.out.println((char)b1);
+			....
+//        int b4 = is.read(); // 读取完毕返回-1
+//        System.out.println(b4);
+
+        // 3、使用循环改进
+        // 定义一个变量记录每次读取的字节    a  b  3   爱
+        //                              o o  o   [ooo]
+        int b;
+        while (( b = is.read() ) != -1){
+            System.out.print((char) b);
+        }
+    }
+```
+
+
+
+
+
 2. **每次读取一个字节数组**
 
    文件字节输入流：FileInputStream
@@ -270,6 +534,50 @@ IO流概述
 
    - 读取的性能得到了提升
    - 读取中文字符输出无法避免乱码问题。
+
+```java
+public static void main(String[] args) throws Exception {
+        // 1、创建一个文件字节输入流管道与源文件接通
+        InputStream is = new FileInputStream("file-io-app/src/data02.txt");
+
+        // 2、定义一个字节数组，用于读取字节数组
+//        byte[] buffer = new byte[3]; // 3B
+    
+//        int len = is.read(buffer);
+//        System.out.println("读取了几个字节：" + len);
+//        String rs = new String(buffer);
+//        System.out.println(rs);
+//
+//        int len1 = is.read(buffer);
+//        System.out.println("读取了几个字节：" + len1);
+//        String rs1 = new String(buffer);
+//        System.out.println(rs1);
+          // buffer = [a b c]
+  
+          // buffer = [a b c]  ==>  [c d c]
+//        int len2 = is.read(buffer);
+//        System.out.println("读取了几个字节：" + len2);
+    
+    注意：当新读出的数据填不满数组时，没填的位置保持原来的数据不变
+    因此，因采用String的另一种有参构造器：string(数组，开始位置，结束位置)
+          // 读取多少倒出多少
+//        String rs2 = new String(buffer,0 ,len2);
+//        System.out.println(rs2);
+//
+//        int len3 = is.read(buffer);
+//        System.out.println(len3); // 读取完毕返回-1
+
+        // 3、改进使用循环，每次读取一个字节数组
+        byte[] buffer = new byte[3];
+        int len; // 记录每次读取的字节数。
+        while ((len = is.read(buffer)) != -1) {
+            // 读取多少倒出多少
+            System.out.print(new String(buffer, 0 , len));
+        }
+    }
+```
+
+
 
 
 
@@ -296,6 +604,29 @@ IO流概述
    | 方法名称                                        | 说明                                                         |
    | ----------------------------------------------- | ------------------------------------------------------------ |
    | public byte[] readAllBytes() throws IOException | 直接将当前字节输入流对应的文件对象的字节数据装到一个字节数组返回 |
+
+```java
+public static void main(String[] args) throws Exception {
+    
+    //方法一：
+        // 1、创建一个文件字节输入流管道与源文件接通
+        File f = new File("file-io-app/src/data03.txt");
+        InputStream is = new FileInputStream(f);
+
+        // 2、定义一个字节数组与文件的大小刚刚一样大。
+//        byte[] buffer = new byte[(int) f.length()];
+//        int len = is.read(buffer);
+//        System.out.println("读取了多少个字节：" + len);
+//        System.out.println("文件大小：" + f.length());
+//        System.out.println(new String(buffer));
+
+    //方法二：
+        // 读取全部字节数组
+        byte[] buffer = is.readAllBytes();
+        System.out.println(new String(buffer));
+
+    }
+```
 
 
 
@@ -343,6 +674,43 @@ IO流概述
       - flush()刷新数据
       - close()方法是关闭流，关闭包含刷新，关闭后流不可以继续使用了。
 
+   ```java
+   public static void main(String[] args) throws Exception {
+       // 1、创建一个文件字节输出流管道与目标文件接通
+       OutputStream os = new FileOutputStream("file-io-app/src/out04.txt" , true); // 追加数据管道
+       //OutputStream os = new FileOutputStream("file-io-app/src/out04.txt"); // 先清空之前的数据，写新数据进入
+   
+       // 2、写数据出去
+       // a.public void write(int a):写一个字节出去
+       os.write('a');
+       os.write(98);
+       os.write("\r\n".getBytes()); // 换行
+       // os.write('徐'); // [ooo]不能写中文，中文不止一个字节
+   
+       // b.public void write(byte[] buffer):写一个字节数组出去。
+       byte[] buffer = {'a' , 97, 98, 99};
+       os.write(buffer);
+       os.write("\r\n".getBytes()); // 换行
+   
+       byte[] buffer2 = "我是中国人".getBytes();
+       //byte[] buffer2 = "我是中国人".getBytes("GBK");
+       //IDEA默认采用UTF-8编码，若想采用其它格式的字符编码可以用如上方法
+       os.write(buffer2);
+       os.write("\r\n".getBytes()); // 换行
+   
+   
+       // c. public void write(byte[] buffer , int pos , int len):写一个字节数组的一部分出去。
+       byte[] buffer3 = {'a',97, 98, 99};
+       os.write(buffer3, 0 , 3);
+       os.write("\r\n".getBytes()); // 换行
+   
+       // os.flush(); // 写数据必须，刷新数据 可以继续使用流
+       os.close(); // 释放资源，包含了刷新的！关闭后流不可以使用了
+   }
+   ```
+
+   
+
 2. 文件拷贝
 
    ![文件字节复制流程](D:\桌面文件\笔记\notes\java-base\image\copy_byte_process.png)
@@ -362,6 +730,37 @@ IO流概述
 
    **字节流适合做一切文件数据的拷贝吗？**
    任何文件的底层都是字节，拷贝是一字不漏的转移字节，只要前后文件格式、编码一致没有任何问题。
+
+```java
+/**
+ *   目标：学会使用字节流完成文件的复制（支持一切文件类型的复制）
+ */
+public static void main(String[] args) {
+    try {
+        // 1、创建一个字节输入流管道与原视频接通
+        InputStream is = new FileInputStream("file-io-app/src/out04.txt");
+
+        // 2、创建一个字节输出流管道与目标文件接通
+        OutputStream os = new FileOutputStream("file-io-app/src/out05.txt");
+
+        // 3、定义一个字节数组转移数据
+        byte[] buffer = new byte[1024];
+        int len; // 记录每次读取的字节数。
+        while ((len = is.read(buffer)) != -1){
+            os.write(buffer, 0 , len);
+        }
+        System.out.println("复制完成了！");
+
+        // 4、关闭流。
+        os.close();
+        is.close();
+    } catch (Exception e){
+        e.printStackTrace();
+    }
+}
+```
+
+
 
 
 
@@ -386,40 +785,111 @@ try {
 }
 ```
 
+```java
+public static int test(int a , int b){
+    try {
+        int c = a / b;
+        return c;
+    }catch (Exception e){
+        e.printStackTrace();
+        return -111111; // 计算出现bug.
+    }finally {
+        System.out.println("--finally--");
+        // 哪怕上面有return语句执行，也必须先执行完这里才可以！
+        // 开发中不建议在这里加return ，如果加了，返回的永远是这里的数据了，这样会出问题！
+        return 100;
+    }
+}
+```
+
+**采用如上格式关闭流：**
+
+因为 try 和 finally 是两个代码块，在 try 中创建的流不能在 finally 中起作用，所以要定义在外面
+
+要判断文件指针是否为空，所以还要 try-catch-finally，
+
+```
+InputStream is = null ;
+OutputStream os = null;
+try{
+	...
+}catch (Exception e){
+	e.printStackTrace();
+} finally {
+    // 关闭资源！
+    try {
+    	if(os != null) os.close();
+    } catch (Exception e) {
+    	e.printStackTrace();
+    }
+    try {
+    	if(is != null) is.close();
+    } catch (Exception e) {
+    	e.printStackTrace();
+    }
+}
+
+```
+
+```java
+InputStream is = null;
+OutputStream os = null;
+try {
+
+    // System.out.println(10/ 0);
+
+    // 1、创建一个字节输入流管道与原视频接通
+    is = new FileInputStream("file-io-app/src/out04.txt");
+
+    // 2、创建一个字节输出流管道与目标文件接通
+    os = new FileOutputStream("file-io-app/src/out05.txt");
+
+    // 3、定义一个字节数组转移数据
+    byte[] buffer = new byte[1024];
+    int len; // 记录每次读取的字节数。
+    while ((len = is.read(buffer)) != -1){
+        os.write(buffer, 0 , len);
+    }
+    System.out.println("复制完成了！");
+
+    //   System.out.println( 10 / 0);
+
+} catch (Exception e){
+    e.printStackTrace();
+} finally {
+    // 无论代码是正常结束，还是出现异常都要最后执行这里
+    System.out.println("========finally=========");
+    
+    try {
+        // 4、关闭流。
+        if(os!=null)os.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    
+    try {
+        if(is != null) is.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+
+
 ## try-with-resource
 
 1. finally虽然可以用于释放资源，但是释放资源的代码过于繁琐？
 
 2. 有没有办法简化？
 
-   ```
-   InputStream is = null ;
-   OutputStream os = null;
-   try{
-   	...
-   }catch (Exception e){
-   	e.printStackTrace();
-   } finally {
-       // 关闭资源！
-       try {
-       	if(os != null) os.close();
-       } catch (Exception e) {
-       	e.printStackTrace();
-       }
-       try {
-       	if(is != null) is.close();
-       } catch (Exception e) {
-       	e.printStackTrace();
-       }
-   }
    
-   ```
 
 **JDK 7和JDK9中都简化了资源释放操作**
 
 **基本做法**：手动释放资源
 
-```
+```java
 try{
 	可能出现异常的代码;
 }catch(异常类名 变量名){
@@ -431,13 +901,57 @@ try{
 
 **JDK7改进方案**： 资源用完最终自动释放
 
-```
+```java
 try(定义流对象){
 	可能出现异常的代码;
 }catch(异常类名 变量名){
 	异常的处理代码;
 } 
 ```
+
+```java
+public static void main(String[] args) {
+
+    try (
+        // 这里面只能放置资源对象，用完会自动关闭：自动调用资源对象的close方法关闭资源（即使出现异常也会做关闭操作）
+        // 1、创建一个字节输入流管道与原视频接通
+        InputStream is = new FileInputStream("file-io-app/src/out04.txt");
+        // 2、创建一个字节输出流管道与目标文件接通
+        OutputStream os = new FileOutputStream("file-io-app/src/out05.txt");
+
+        // int age = 23; // 这里只能放资源
+        //这是自己创建的资源，代码在下面
+        MyConnection connection = new MyConnection(); // 最终会自动调用资源的close方法
+    ) {
+
+        // 3、定义一个字节数组转移数据
+        byte[] buffer = new byte[1024];
+        int len; // 记录每次读取的字节数。
+        while ((len = is.read(buffer)) != -1){
+            os.write(buffer, 0 , len);
+        }
+        System.out.println("复制完成了！");
+
+    } catch (Exception e){
+        e.printStackTrace();
+    }
+
+}
+```
+
+```java
+//自定义资源，下面有简单的介绍
+class MyConnection implements AutoCloseable{
+    @Override
+    public void close() throws IOException {
+        System.out.println("连接资源被成功释放了！");
+    }
+}
+```
+
+
+
+
 
 **JDK9改进方案：**资源用完最终自动释放
 
@@ -451,9 +965,39 @@ try(输入流对象；输出流对象){
 }
 ```
 
+```java
+public static void main(String[] args) throws Exception {
+
+    // 这里面只能放置资源对象，用完会自动关闭：自动调用资源对象的close方法关闭资源（即使出现异常也会做关闭操作）
+    
+    // 1、创建一个字节输入流管道与原视频接通
+    InputStream is = new FileInputStream("file-io-app/src/out04.txt");
+    // 2、创建一个字节输出流管道与目标文件接通
+    OutputStream os = new FileOutputStream("file-io-app/src/out05.txt");
+    
+    try ( is ; os ) {
+        
+        // 3、定义一个字节数组转移数据
+        byte[] buffer = new byte[1024];
+        int len; // 记录每次读取的字节数。
+        while ((len = is.read(buffer)) != -1){
+            os.write(buffer, 0 , len);
+        }
+        System.out.println("复制完成了！");
+
+    } catch (Exception e){
+        e.printStackTrace();
+    }
+}
+```
+
+
+
+
+
 **注意**
 
-- JDK 7 以及 JDK 9的()中只能放置资源对象，否则报错
+- JDK 7 以及 JDK 9的 try(  ) 的括号中只能放置资源对象，否则报错
 - 什么是资源呢？
 - 资源都是实现了Closeable/AutoCloseable接口的类对象
 
@@ -469,6 +1013,59 @@ try(输入流对象；输出流对象){
 
 1. IO默认不可以拷贝文件夹
 2. 我们需要遍历文件夹，如果是文件则拷贝过去，如果是文件夹则要进行1-1创建，继续复制内容。
+
+```java
+public static void main(String[] args) {
+    // D:\resources
+    copy(new File("D:\\resources") , new File("D:\\new"));
+}
+
+public static void copy(File src , File dest){
+    // 1、判断源目录是否存在
+    if(src!= null && src.exists() && src.isDirectory()){
+        // 2、目标目录需要创建一下  D:\new\resources
+        File destOne = new File(dest , src.getName());
+        destOne.mkdirs();
+
+        // 3、提取原目录下的全部一级文件对象
+        File[] files = src.listFiles();
+        // 4、判断是否存在一级文件对象
+        if(files != null && files.length > 0) {
+            // 5、遍历一级文件对象
+            for (File file : files) {
+                // 6、判断是文件还是文件夹，是文件直接复制过去
+                if(file.isFile()){
+                    copyFile(file, new File(destOne , file.getName()));
+                }else {
+                    // 7、当前遍历的是文件夹，递归复制
+                    copy(file, destOne);
+                }
+            }
+        }
+
+    }
+}
+
+public static void copyFile(File srcFile, File destFile){
+    try (
+        // 1、创建一个字节输入流管道与原视频接通
+        InputStream is = new FileInputStream(srcFile);
+        // 2、创建一个字节输出流管道与目标文件接通
+        OutputStream os = new FileOutputStream(destFile);
+    ) {
+        // 3、定义一个字节数组转移数据
+        byte[] buffer = new byte[1024];
+        int len; // 记录每次读取的字节数。
+        while ((len = is.read(buffer)) != -1){
+            os.write(buffer, 0 , len);
+        }
+    } catch (Exception e){
+        e.printStackTrace();
+    }
+}
+```
+
+
 
 
 
@@ -503,6 +1100,29 @@ try(输入流对象；输出流对象){
    - 读取中文字符不会出现乱码（如果代码文件编码一致）
    - 性能较慢
 
+```java
+public static void main(String[] args) throws Exception {
+    // 目标：每次读取一个字符。
+    // 1、创建一个字符输入流管道与源文件接通
+    Reader fr = new FileReader("file-io-app\\src\\data06.txt");
+
+    // 2、读取一个字符返回，没有可读的字符了返回-1
+    // int code = fr.read();
+    // System.out.print((char)code);
+    //
+    // int code1 = fr.read();
+    // System.out.print((char)code1);
+
+    // 3、使用循环读取字符
+    int code;
+    while ((code = fr.read()) != -1){
+        System.out.print((char) code);
+    }
+}
+```
+
+
+
 
 
 2. 一次读取一个字符数组
@@ -520,6 +1140,24 @@ try(输入流对象；输出流对象){
 
    - 读取的性能得到了提升
    - 读取中文字符输出不会乱码。
+
+```java
+public static void main(String[] args) throws Exception {
+    // 1、创建一个文件字符输入流与源文件接通
+    Reader fr = new FileReader("file-io-app/src/data07.txt");
+
+    // 2、用循环，每次读取一个字符数组的数据。  1024 + 1024 + 8
+    char[] buffer = new char[1024]; // 1K字符
+    int len;
+    while ((len = fr.read(buffer)) != -1) {
+        String rs = new String(buffer, 0, len);
+        System.out.print(rs);
+    }
+
+}
+```
+
+
 
 
 
@@ -574,3 +1212,43 @@ try(输入流对象；输出流对象){
    - 字节流适合做一切文件数据的拷贝（音视频，文本）
    - 字节流不适合读取中文内容输出
    - 字符流适合做文本文件的操作（读，写）
+
+```java
+public static void main(String[] args) throws Exception {
+    // 1、创建一个字符输出流管道与目标文件接通
+    // Writer fw = new FileWriter("file-io-app/src/out08.txt"); // 覆盖管道，每次启动都会清空文件之前的数据
+    Writer fw = new FileWriter("file-io-app/src/out08.txt", true); // 覆盖管道，每次启动都会清空文件之前的数据
+
+    //a.public void write(int c):写一个字符出去
+    fw.write(98);
+    fw.write('a');
+    fw.write('徐'); // 不会出问题了
+    fw.write("\r\n"); // 换行
+
+    //b.public void write(String c)写一个字符串出去
+    fw.write("abc我是中国人");
+    fw.write("\r\n"); // 换行
+
+
+    //c.public void write(char[] buffer):写一个字符数组出去
+    char[] chars = "abc我是中国人".toCharArray();
+    fw.write(chars);
+    fw.write("\r\n"); // 换行
+
+
+    //d.public void write(String c ,int pos ,int len):写字符串的一部分出去
+    fw.write("abc我是中国人", 0, 5);
+    fw.write("\r\n"); // 换行
+
+
+    //e.public void write(char[] buffer ,int pos ,int len):写字符数组的一部分出去
+    fw.write(chars, 3, 5);
+    fw.write("\r\n"); // 换行
+
+
+    // fw.flush();// 刷新后流可以继续使用
+    fw.close(); // 关闭包含刷线，关闭后流不能使用
+
+}
+```
+
