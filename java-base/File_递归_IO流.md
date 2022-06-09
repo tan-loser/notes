@@ -109,21 +109,21 @@ public static void main(String[] args) {
 
 ```java
 File f2 = new File("file-io-app\\src\\data.txt");
-        // a.获取它的绝对路径。
-        System.out.println(f2.getAbsolutePath());
-        // b.获取文件定义的时候使用的路径。
-        System.out.println(f2.getPath());
-        // c.获取文件的名称：带后缀。
-        System.out.println(f2.getName());
-        // d.获取文件的大小：字节个数。
-        System.out.println(f2.length()); // 字节大小
-        // e.获取文件的最后修改时间
-        long time1 = f2.lastModified();
-        System.out.println("最后修改时间：" + new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(time1));
-        // f、判断文件是文件还是文件夹
-        System.out.println(f2.isFile()); // true
-        System.out.println(f2.isDirectory()); // false
-        System.out.println(f2.exists()); // true
+// a.获取它的绝对路径。
+System.out.println(f2.getAbsolutePath());
+// b.获取文件定义的时候使用的路径。
+System.out.println(f2.getPath());
+// c.获取文件的名称：带后缀。
+System.out.println(f2.getName());
+// d.获取文件的大小：字节个数。
+System.out.println(f2.length()); // 字节大小
+// e.获取文件的最后修改时间
+long time1 = f2.lastModified();
+System.out.println("最后修改时间：" + new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(time1));
+// f、判断文件是文件还是文件夹
+System.out.println(f2.isFile()); // true
+System.out.println(f2.isDirectory()); // false
+System.out.println(f2.exists()); // true
 ```
 
 
@@ -149,31 +149,31 @@ File类删除文件的功能
 
 ```java
 public static void main(String[] args) throws IOException {
-        File f = new File("file-io-app\\src\\data.txt");
-        // a.创建新文件，创建成功返回true ,反之 ,不需要这个，以后文件写出去的时候都会自动创建
-        System.out.println(f.createNewFile());
-        File f1 = new File("file-io-app\\src\\data02.txt");
-        System.out.println(f1.createNewFile()); // （几乎不用的，因为以后文件都是自动创建的！）
+    File f = new File("file-io-app\\src\\data.txt");
+    // a.创建新文件，创建成功返回true ,反之 ,不需要这个，以后文件写出去的时候都会自动创建
+    System.out.println(f.createNewFile());
+    File f1 = new File("file-io-app\\src\\data02.txt");
+    System.out.println(f1.createNewFile()); // （几乎不用的，因为以后文件都是自动创建的！）
 
-        // b.mkdir创建一级目录
-        File f2 = new File("D:/resources/aaa");
-        System.out.println(f2.mkdir());
+    // b.mkdir创建一级目录
+    File f2 = new File("D:/resources/aaa");
+    System.out.println(f2.mkdir());
 
-        // c.mkdirs创建多级目录(重点)
-        File f3 = new File("D:/resources/ccc/ddd/eee/ffff");
-//        System.out.println(f3.mkdir());
-        System.out.println(f3.mkdirs()); // 支持多级创建
+    // c.mkdirs创建多级目录(重点)
+    File f3 = new File("D:/resources/ccc/ddd/eee/ffff");
+    //        System.out.println(f3.mkdir());
+    System.out.println(f3.mkdirs()); // 支持多级创建
 
-        // d.删除文件或者空文件夹
-        System.out.println(f1.delete());
-        File f4 = new File("D:/resources/xueshan.jpeg");
-        System.out.println(f4.delete()); 
-    
-    	// 占用一样可以删除,当其它应用在用的文件也可以删除
-        // 只能删除空文件夹,不能删除非空文件夹.
-        File f5 = new File("D:/resources/aaa");
-        System.out.println(f5.delete());
-    }
+    // d.删除文件或者空文件夹
+    System.out.println(f1.delete());
+    File f4 = new File("D:/resources/xueshan.jpeg");
+    System.out.println(f4.delete()); 
+
+    // 占用一样可以删除,当其它应用在用的文件也可以删除
+    // 只能删除空文件夹,不能删除非空文件夹.
+    File f5 = new File("D:/resources/aaa");
+    System.out.println(f5.delete());
+}
 ```
 
 
@@ -243,47 +243,47 @@ System.out.println(Arrays.toString(files1));
 
    ```java
    public static void main(String[] args) {
-           // 2、传入目录 和  文件名称
-           searchFile(new File("D:/") , "eDiary.exe");
-       }
+       // 2、传入目录 和  文件名称
+       searchFile(new File("D:/") , "eDiary.exe");
+   }
    
-       /**
-        * 1、搜索某个目录下的全部文件，找到我们想要的文件。
-        * @param dir  被搜索的源目录
-        * @param fileName 被搜索的文件名称
-        */
-       public static void searchFile(File dir,String fileName){
-           // 3、判断dir是否是目录
-           if(dir != null && dir.isDirectory()){
-               // 可以找了
-               // 4、提取当前目录下的一级文件对象
-               File[] files = dir.listFiles(); // null  []
-               // 5、判断是否存在一级文件对象，存在才可以遍历
-               if(files != null && files.length > 0) {
-                   for (File file : files) {
-                       // 6、判断当前遍历的一级文件对象是文件 还是 目录
-                       if(file.isFile()){
-                           // 7、是不是咱们要找的，是把其路径输出即可
-                           if(file.getName().contains(fileName)){
-                               System.out.println("找到了：" + file.getAbsolutePath());
-                               // 启动它。
-                               try {
-                                   Runtime r = Runtime.getRuntime();
-                                   r.exec(file.getAbsolutePath());
-                               } catch (IOException e) {
-                                   e.printStackTrace();
-                               }
+   /**
+     * 1、搜索某个目录下的全部文件，找到我们想要的文件。
+     * @param dir  被搜索的源目录
+     * @param fileName 被搜索的文件名称
+     */
+   public static void searchFile(File dir,String fileName){
+       // 3、判断dir是否是目录
+       if(dir != null && dir.isDirectory()){
+           // 可以找了
+           // 4、提取当前目录下的一级文件对象
+           File[] files = dir.listFiles(); // null  []
+           // 5、判断是否存在一级文件对象，存在才可以遍历
+           if(files != null && files.length > 0) {
+               for (File file : files) {
+                   // 6、判断当前遍历的一级文件对象是文件 还是 目录
+                   if(file.isFile()){
+                       // 7、是不是咱们要找的，是把其路径输出即可
+                       if(file.getName().contains(fileName)){
+                           System.out.println("找到了：" + file.getAbsolutePath());
+                           // 启动它。
+                           try {
+                               Runtime r = Runtime.getRuntime();
+                               r.exec(file.getAbsolutePath());
+                           } catch (IOException e) {
+                               e.printStackTrace();
                            }
-                       }else {
-                           // 8、是文件夹，需要继续递归寻找
-                           searchFile(file, fileName);
                        }
+                   }else {
+                       // 8、是文件夹，需要继续递归寻找
+                       searchFile(file, fileName);
                    }
                }
-           }else {
-               System.out.println("对不起，当前搜索的位置不是文件夹！");
            }
+       }else {
+           System.out.println("对不起，当前搜索的位置不是文件夹！");
        }
+   }
    ```
 
    
@@ -402,7 +402,7 @@ System.out.println(Arrays.toString(files1));
 | byte[] getBytes()                   | 使用平台的默认字符集将该 String编码为一系列字节，将结果存储到新的字节数组中 |
 | byte[] getBytes(String charsetName) | 使用指定的字符集将该 String编码为一系列字节，将结果存储到新的字节数组中 |
 
-String解码
+**String解码**
 
 | 构造器           | 说明               |
 | -------- | ----------------------- |
@@ -443,7 +443,7 @@ IO流概述
 - I表示intput，是数据从硬盘文件读入到内存的过程，称之输入，负责读。
 - O表示output，是内存程序的数据从内存到写出到硬盘文件的过程，称之输出，负责写。
 
-<img src="D:\桌面文件\笔记\notes\java-base\image\IO分类.png" alt="IO流分类" style="zoom:90%;" />
+<img src="\image\IO分类.png" alt="IO流分类" style="zoom:90%;" />
 
 **总结流的四大类:**
 
@@ -460,10 +460,10 @@ IO流概述
 
 ```
 IO流的体系：
-             字节流                                   字符流
-    字节输入流            字节输出流               字符输入流        字符输出流
-    InputStream          OutputStream           Reader           Writer  (抽象类)
-    FileInputStream      FileOutputStream       FileReader       FileWriter(实现类，可以使用的)
+			   字节流                                   字符流
+字节输入流            字节输出流               字符输入流        字符输出流
+InputStream          OutputStream           Reader           Writer  (抽象类)
+FileInputStream      FileOutputStream       FileReader       FileWriter(实现类，可以使用的)
 ```
 
 ## 文件字节输入流
@@ -713,7 +713,7 @@ public static void main(String[] args) throws Exception {
 
 2. 文件拷贝
 
-   ![文件字节复制流程](D:\桌面文件\笔记\notes\java-base\image\copy_byte_process.png)
+   ![文件字节复制流程](\image\copy_byte_process.png)
 
    **需求：**
 
@@ -1250,5 +1250,883 @@ public static void main(String[] args) throws Exception {
     fw.close(); // 关闭包含刷线，关闭后流不能使用
 
 }
+```
+
+# 缓冲流
+
+## 缓冲流概述
+
+缓冲流也称为高效流、或者高级流。之前学习的字节流可以称为原始流。
+
+作用：缓冲流自带缓冲区、可以提高原始字节流、字符流读写数据的性能
+
+长度：8192
+
+![](\image\BufferStream.png)
+
+**缓冲流的作用？**
+
+缓冲流自带缓冲区、可以提高原始字节流、字符流读写数据的性能
+
+**缓冲流有几种？**
+
+- 字节缓冲流
+  - 字节缓冲输入流： BufferedInputStream
+  -  字节缓冲输出流：BufferedOutputStream
+- 字符缓冲流
+  - 字符缓冲输入流：BufferedReader
+  - 字符缓冲输出流：BufferedWriter
+
+## 字节缓冲流
+
+**字节缓冲流性能优化原理：**
+
+- 字节缓冲输入流自带了8KB缓冲池，以后我们直接从缓冲池读取数据，所以性能较好。
+- 字节缓冲输出流自带了8KB缓冲池，数据就直接写入到缓冲池中去，写数据性能极高了。
+
+1. **字节缓冲流**
+
+-  字节缓冲输入流：BufferedInputStream，提高字节输入流读取数据的性能，读写功能上并无变化。
+-  字节缓冲输出流：BufferedOutputStream，提高字节输出流读取数据的性能，读写功能上并无变化。
+
+| 构造器                                       | 说明                                                         |
+| -------------------------------------------- | ------------------------------------------------------------ |
+| public BufferedInputStream(InputStream is)   | 可以把低级的字节输入流包装成一个高级的缓冲字节输入流管道，从而提高字节输入流读数据的性能 |
+| public BufferedOutputStream(OutputStream os) | 可以把低级的字节输出流包装成一个高级的缓冲字节输出流，从而提高写数据的性能 |
+
+推荐使用哪种方式提高字节流读写数据的性能？
+
+- 建议使用**字节缓冲输入流、字节缓冲输出流**，结合**字节数组的**方式，目前来看是性能最优的组合。
+
+
+
+```java
+public static void main(String[] args) {
+
+    try (
+        // 这里面只能放置资源对象，用完会自动关闭：自动调用资源对象的close方法关闭资源（即使出现异常也会做关闭操作）
+        // 1、创建一个字节输入流管道与原视频接通
+        InputStream is = new FileInputStream("D:\\resources\\newmeinv.jpeg");
+        // a.把原始的字节输入流包装成高级的缓冲字节输入流
+        InputStream bis = new BufferedInputStream(is);
+        // 2、创建一个字节输出流管道与目标文件接通
+        OutputStream os = new FileOutputStream("D:\\resources\\newmeinv222.jpeg");
+        // b.把字节输出流管道包装成高级的缓冲字节输出流管道
+        OutputStream bos = new BufferedOutputStream(os);
+
+    ) {
+
+        // 3、定义一个字节数组转移数据
+        byte[] buffer = new byte[1024];
+        int len; // 记录每次读取的字节数。
+        while ((len = bis.read(buffer)) != -1){
+            bos.write(buffer, 0 , len);
+        }
+        System.out.println("复制完成了！");
+
+    } catch (Exception e){
+        e.printStackTrace();
+    }
+
+}
+```
+
+```java
+private static final String SRC_FILE = "D:\\course\\基础加强\\day08-日志框架、阶段项目\\视频\\14、用户购票功能.avi";
+private static final String DEST_FILE = "D:\\course\\";
+
+public static void main(String[] args) {
+    // copy01(); // 使用低级的字节流按照一个一个字节的形式复制文件：慢的让人简直无法忍受。直接被淘汰。
+    copy02(); // 使用低级的字节流按照一个一个字节数组的形式复制文件: 比较慢，但是还是可以忍受的！
+    // copy03(); // 缓冲流一个一个字节复制：很慢，不建议使用。
+    copy04(); // 缓冲流一个一个字节数组复制：飞快，简直太完美了（推荐使用）
+}
+
+private static void copy04() {
+    long startTime = System.currentTimeMillis();
+    try (
+        // 1、创建低级的字节输入流与源文件接通
+        InputStream is = new FileInputStream(SRC_FILE);
+        // a.把原始的字节输入流包装成高级的缓冲字节输入流
+        InputStream bis = new BufferedInputStream(is);
+        // 2、创建低级的字节输出流与目标文件接通
+        OutputStream os = new FileOutputStream(DEST_FILE + "video4.avi");
+        // b.把字节输出流管道包装成高级的缓冲字节输出流管道
+        OutputStream bos = new BufferedOutputStream(os);
+    ) {
+
+        // 3、定义一个字节数组转移数据
+        byte[] buffer = new byte[1024];
+        int len; // 记录每次读取的字节数。
+        while ((len = bis.read(buffer)) != -1){
+            bos.write(buffer, 0 , len);
+        }
+
+    } catch (Exception e){
+        e.printStackTrace();
+    }
+    long endTime = System.currentTimeMillis();
+    System.out.println("使用缓冲的字节流按照一个一个字节数组的形式复制文件耗时：" + (endTime - startTime)/1000.0 + "s");
+}
+
+
+
+private static void copy03() {
+    long startTime = System.currentTimeMillis();
+    try (
+        // 1、创建低级的字节输入流与源文件接通
+        InputStream is = new FileInputStream(SRC_FILE);
+        // a.把原始的字节输入流包装成高级的缓冲字节输入流
+        InputStream bis = new BufferedInputStream(is);
+        // 2、创建低级的字节输出流与目标文件接通
+        OutputStream os = new FileOutputStream(DEST_FILE + "video3.avi");
+        // b.把字节输出流管道包装成高级的缓冲字节输出流管道
+        OutputStream bos = new BufferedOutputStream(os);
+    ){
+
+        // 3、定义一个变量记录每次读取的字节（一个一个字节的复制）
+        int b;
+        while ((b = bis.read()) != -1){
+            bos.write(b);
+        }
+    }catch (Exception e){
+        e.printStackTrace();
+    }
+    long endTime = System.currentTimeMillis();
+    System.out.println("使用缓冲的字节流按照一个一个字节的形式复制文件耗时：" + (endTime - startTime)/1000.0 + "s");
+}
+
+
+private static void copy02() {
+    long startTime = System.currentTimeMillis();
+    try (
+        // 这里面只能放置资源对象，用完会自动关闭：自动调用资源对象的close方法关闭资源（即使出现异常也会做关闭操作）
+        // 1、创建一个字节输入流管道与原视频接通
+        InputStream is = new FileInputStream(SRC_FILE);
+        // 2、创建一个字节输出流管道与目标文件接通
+        OutputStream os = new FileOutputStream(DEST_FILE + "video2.avi")
+    ) {
+
+        // 3、定义一个字节数组转移数据
+        byte[] buffer = new byte[1024];
+        int len; // 记录每次读取的字节数。
+        while ((len = is.read(buffer)) != -1){
+            os.write(buffer, 0 , len);
+        }
+    } catch (Exception e){
+        e.printStackTrace();
+    }
+    long endTime = System.currentTimeMillis();
+    System.out.println("使用低级的字节流按照一个一个字节数组的形式复制文件耗时：" + (endTime - startTime)/1000.0 + "s");
+}
+
+/**
+      使用低级的字节流按照一个一个字节的形式复制文件
+     */
+private static void copy01() {
+    long startTime = System.currentTimeMillis();
+    try (
+        // 1、创建低级的字节输入流与源文件接通
+        InputStream is = new FileInputStream(SRC_FILE);
+        // 2、创建低级的字节输出流与目标文件接通
+        OutputStream os = new FileOutputStream(DEST_FILE + "video1.avi")
+    ){
+
+        // 3、定义一个变量记录每次读取的字节（一个一个字节的复制）
+        int b;
+        while ((b = is.read()) != -1){
+            os.write(b);
+        }
+    }catch (Exception e){
+        e.printStackTrace();
+    }
+    long endTime = System.currentTimeMillis();
+    System.out.println("使用低级的字节流按照一个一个字节的形式复制文件耗时：" + (endTime - startTime)/1000.0 + "s");
+}
+```
+
+## 字符缓冲流
+
+**1. 字符缓冲输入流**
+
+字符缓冲输入流：BufferedReader。
+
+**作用**：提高字符输入流读取数据的性能，除此之外多了按照行读取数据的功能。
+
+| 构造器                          | 说明                                                         |
+| ------------------------------- | ------------------------------------------------------------ |
+| public BufferedReader(Reader r) | 可以把低级的字符输入流包装成一个高级的缓冲字符输入流管道，从而提高字符输入流读数据的性能 |
+
+字符缓冲输入流新增功能
+
+| 方法                     | 说明                                                 |
+| ------------------------ | ---------------------------------------------------- |
+| public String readLine() | 读取一行数据返回，如果读取没有完毕，无行可读返回null |
+
+**2. 字符缓冲输出流**
+
+字符缓冲输出流：BufferedWriter。
+
+**作用**：提高字符输出流写取数据的性能，除此之外多了换行功能
+
+| 构造器                          | 说明                                                         |
+| ------------------------------- | ------------------------------------------------------------ |
+| public BufferedWriter(Writer w) | 可以把低级的字符输出流包装成一个高级的缓冲字符输出流管道，从而提高字符输出流写数据的性能 |
+
+字符缓冲输出流新增功能
+
+| 方法                  | 说明     |
+| --------------------- | -------- |
+| public void newLine() | 换行操作 |
+
+```java
+public static void main(String[] args) {
+    try (
+        // 1、创建一个文件字符输入流与源文件接通。
+        Reader fr = new FileReader("io-app2/src/data01.txt");
+        // a、把低级的字符输入流包装成高级的缓冲字符输入流。
+        BufferedReader br = new BufferedReader(fr);
+    ){
+
+        // 2、用循环，每次读取一个字符数组的数据。  1024 + 1024 + 8
+        //char[] buffer = new char[1024]; // 1K字符
+        //int len;
+        //while ((len = br.read(buffer)) != -1) {
+        //    String rs = new String(buffer, 0, len);
+        //    System.out.print(rs);
+        //}
+
+        String line;
+        while ((line = br.readLine()) != null){
+            System.out.println(line);
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+```java
+public static void main(String[] args) throws Exception {
+    // 1、创建一个字符输出流管道与目标文件接通
+    Writer fw = new FileWriter("io-app2/src/out02.txt"); // 覆盖管道，每次启动都会清空文件之前的数据
+    //Writer fw = new FileWriter("io-app2/src/out02.txt", true); // 追加数据
+    BufferedWriter bw = new BufferedWriter(fw);
+
+    //      a.public void write(int c):写一个字符出去
+    bw.write(98);
+    bw.write('a');
+    bw.write('徐'); // 不会出问题了
+    bw.newLine(); // bw.write("\r\n"); // 换行
+
+    //       b.public void write(String c)写一个字符串出去
+    bw.write("abc我是中国人");
+    bw.newLine(); // bw.write("\r\n"); // 换行
+
+
+    //       c.public void write(char[] buffer):写一个字符数组出去
+    char[] chars = "abc我是中国人".toCharArray();
+    bw.write(chars);
+    bw.newLine(); // bw.write("\r\n"); // 换行
+
+
+    //       d.public void write(String c ,int pos ,int len):写字符串的一部分出去
+    bw.write("abc我是中国人", 0, 5);
+    bw.newLine(); // bw.write("\r\n"); // 换行
+
+    //       e.public void write(char[] buffer ,int pos ,int len):写字符数组的一部分出去
+    bw.write(chars, 3, 5);
+    bw.newLine(); // bw.write("\r\n"); // 换行
+
+
+    // fw.flush();// 刷新后流可以继续使用
+    bw.close(); // 关闭包含刷线，关闭后流不能使用
+
+}
+
+```
+
+拷贝出师表到另一个文件，恢复顺序
+
+需求：把《出师表》的文章顺序进行恢复到一个新文件中。
+
+分析：
+
+1. 定义一个缓存字符输入流管道与源文件接通。
+2. 定义一个List集合存储读取的每行数据。
+3. 定义一个循环按照行读取数据，存入到List集合中去。
+4. 对List集合中的每行数据按照首字符编号升序排序。
+5. 定义一个缓存字符输出管道与目标文件接通。
+6. 遍历List集合中的每个元素，用缓冲输出管道写出并换行。
+
+```java
+public static void main(String[] args) {
+    try(
+        // 1、创建缓冲字符输入流管道与源文件接通
+        BufferedReader br = new BufferedReader(new FileReader("io-app2/src/csb.txt"));
+
+        // 5、定义缓冲字符输出管道与目标文件接通
+        BufferedWriter bw = new BufferedWriter(new FileWriter("io-app2/src/new.txt"));
+    ) {
+
+        // 2、定义一个List集合存储每行内容
+        List<String> data = new ArrayList<>();
+        // 3、定义循环，按照行读取文章
+        String line;
+        while ((line = br.readLine()) != null){
+            data.add(line);
+        }
+        System.out.println(data);
+
+        // 4、排序
+        // 自定义排序规则
+        List<String> sizes = new ArrayList<>();
+        Collections.addAll(sizes, "一","二","三","四","五","陆","柒","八","九","十","十一");
+
+        Collections.sort(data, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                // o1   八.,....
+                // o2   柒.,....
+                return sizes.indexOf(o1.substring(0, o1.indexOf(".")))
+                    - sizes.indexOf(o2.substring(0, o2.indexOf(".")));
+            }
+        });
+        System.out.println(data);
+
+        // 6、遍历集合中的每行文章写出去，且要换行
+        for (String datum : data) {
+            bw.write(datum);
+            bw.newLine(); // 换行
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+```
+
+```
+十一.出师未捷身先死，长使英雄泪满襟。
+三.侍中、侍郎郭攸之、费祎、董允等，此皆良实，志虑忠纯，是以先帝简拔以遗陛下。愚以为宫中之事，事无大小，悉以咨之，然后施行，必得裨补阙漏，有所广益。
+八.愿陛下托臣以讨贼兴复之效，不效，则治臣之罪，以告先帝之灵。若无兴德之言，则责攸之、祎、允等之慢，以彰其咎；陛下亦宜自谋，以咨诹善道，察纳雅言，深追先帝遗诏，臣不胜受恩感激。
+四.将军向宠，性行淑均，晓畅军事，试用之于昔日，先帝称之曰能，是以众议举宠为督。愚以为营中之事，悉以咨之，必能使行阵和睦，优劣得所。
+二.宫中府中，俱为一体，陟罚臧否，不宜异同。若有作奸犯科及为忠善者，宜付有司论其刑赏，以昭陛下平明之理，不宜偏私，使内外异法也。
+一.先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。然侍卫之臣不懈于内，忠志之士忘身于外者，盖追先帝之殊遇，欲报之于陛下也。诚宜开张圣听，以光先帝遗德，恢弘志士之气，不宜妄自菲薄，引喻失义，以塞忠谏之路也。
+九.今当远离，临表涕零，不知所言。
+十.今当远离，临表涕零，不知所言。
+陆.臣本布衣，躬耕于南阳，苟全性命于乱世，不求闻达于诸侯。先帝不以臣卑鄙，猥自枉屈，三顾臣于草庐之中，咨臣以当世之事，由是感激，遂许先帝以驱驰。后值倾覆，受任于败军之际，奉命于危难之间，尔来二十有一年矣。
+柒.先帝知臣谨慎，故临崩寄臣以大事也。受命以来，夙夜忧叹，恐付托不效，以伤先帝之明，故五月渡泸，深入不毛。今南方已定，兵甲已足，当奖率三军，北定中原，庶竭驽钝，攘除奸凶，兴复汉室，还于旧都。此臣所以报先帝而忠陛下之职分也。至于斟酌损益，进尽忠言，则攸之、祎、允之任也。
+五.亲贤臣，远小人，此先汉所以兴隆也；亲小人，远贤臣，此后汉所以倾颓也。先帝在时，每与臣论此事，未尝不叹息痛恨于桓、灵也。侍中、尚书、长史、参军，此悉贞良死节之臣，愿陛下亲之信之，则汉室之隆，可计日而待也。
+```
+
+# 转换流
+
+1. 如果代码编码和文件编码不一致，使用字符流直接读取还能不乱码吗？
+
+- 会乱码。
+- 文件编码和读取的编码必须一致才不会乱码。
+
+2. 如果如何解决呢？
+
+- 使用字符输入转换流
+- 可以提取文件（GBK）的原始字节流，原始字节不会存在问题。
+- 然后把字节流以指定编码转换成字符输入流，这样字符输入流中的字符就不乱码了
+
+**使用相同编码读取不同编码的文件内容**
+
+需求：分别使用如下两种方式读取文件内容
+
+- 代码编码是UTF-8，文件编码也是UTF-8，使用字符流读取观察输出的中文字符结果。
+- 代码编码是UTF-8，文件编码使用GBK，使用字符流读取观察输出的中文字符结果
+
+![](\image\TransStream.png)
+
+```java
+              字节流                                     字符流
+字节输入流               字节输出流              字符输入流            字符输出流
+InputStream             OutputStream          Reader               Writer   (抽象类)
+FileInputStream         FileOutputStream      FileReader           FileWriter(实现类)
+BufferedInputStream     BufferedOutputStream  BufferedReader       BufferedWriter(实现类，缓冲流)
+                                              InputStreamReader    OutputStreamWriter
+```
+
+
+
+## 字符输入转换流
+
+字符输入转换流：InputStreamReader，可以把原始的字节流按照指定编码转换成字符输入流。
+
+| 构造器                                                    | 说明                                                         |
+| --------------------------------------------------------- | ------------------------------------------------------------ |
+| public InputStreamReader(InputStream is)                  | 可以把原始的字节流按照代码默认编码转换成字符输入流。几乎不用，与默认的FileReader一样。 |
+| public InputStreamReader(InputStream is ，String charset) | 可以把原始的字节流按照指定编码转换成字符输入流，这样字符流中的字符就不乱码了(重点) |
+
+```java
+public static void main(String[] args) throws Exception {
+    // 代码UTF-8   文件 GBK  "D:\\resources\\data.txt"
+    // 1、提取GBK文件的原始字节流。   abc 我
+    //                            ooo oo
+    InputStream is = new FileInputStream("D:\\resources\\data.txt");
+    // 2、把原始字节流转换成字符输入流
+    // Reader isr = new InputStreamReader(is); // 默认以UTF-8的方式转换成字符流。 还是会乱码的  跟直接使用FileReader是一样的
+    Reader isr = new InputStreamReader(is , "GBK"); // 以指定的GBK编码转换成字符输入流  完美的解决了乱码问题
+
+    BufferedReader br = new BufferedReader(isr);
+    String line;
+    while ((line = br.readLine()) != null){
+        System.out.println(line);
+    }
+}
+```
+
+
+
+## 字符输出转换流
+
+1、如果需要控制写出去的字符使用的编码，怎么办？
+
+- 可以把字符以指定编码获取字节后再使用字节输出流写出去：
+  - “我爱你中国”.getBytes(编码)
+- 也可以使用字符输出转换流实现。
+
+字符输入转换流：OutputStreamWriter，可以把字节输出流按照指定编码转换成字符输出流。
+
+| 构造器                                                     | 说明                                                         |
+| ---------------------------------------------------------- | ------------------------------------------------------------ |
+| public OutputStreamWriter(OutputStream os)                 | 可以把原始的字节输出流按照代码默认编码转换成字符输出流。几乎不用。 |
+| public OutputStreamWriter(OutputStream os，String charset) | 可以把原始的字节输出流按照指定编码转换成字符输出流(重点)     |
+
+```java
+public static void main(String[] args) throws Exception {
+    // 1、定义一个字节输出流
+    OutputStream os = new FileOutputStream("io-app2/src/out03.txt");
+
+    // 2、把原始的字节输出流转换成字符输出流
+    // Writer osw = new OutputStreamWriter(os); // 以默认的UTF-8写字符出去 跟直接写FileWriter一样
+    Writer osw = new OutputStreamWriter(os , "GBK"); // 指定GBK的方式写字符出去
+
+    // 3、把低级的字符输出流包装成高级的缓冲字符输出流。
+    BufferedWriter bw = new BufferedWriter(osw);
+
+    bw.write("我爱中国1~~");
+    bw.write("我爱中国2~~");
+    bw.write("我爱中国3~~");
+
+    bw.close();
+}
+```
+
+
+
+
+
+# 序列化对象
+
+![](image\序列化对象.png)
+
+## 对象序列化
+
+**作用：**以内存为基准，把内存中的对象存储到磁盘文件中去，称为对象序列化。
+
+使用到的流是对象字节输出流：**ObjectOutputStream**
+
+| 构造器                                      | 说明                                       |
+| ------------------------------------------- | ------------------------------------------ |
+| public ObjectOutputStream(OutputStream out) | 把低级字节输出流包装成高级的对象字节输出流 |
+
+ObjectOutputStream序列化方法
+
+| 方法名称                                  | 说明                                 |
+| ----------------------------------------- | ------------------------------------ |
+| public final void writeObject(Object obj) | 把对象写出去到对象序列化流的文件中去 |
+
+**1. 对象序列化的含义是什么？**
+
+- 把对象数据存入到文件中去。
+
+**2. 对象序列化用到了哪个流？**
+
+- 对象字节输出流ObjectOutputStram
+- public void writeObject(Object obj)
+
+**3. 序列化对象的要求是怎么样的？**
+
+- 对象必须实现序列化接口
+
+```java
+public static void main(String[] args) throws Exception {
+    // 1、创建学生对象
+    Student s = new Student("陈磊", "chenlei","1314520", 21);
+
+    // 2、对象序列化：使用对象字节输出流包装字节输出流管道
+    ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("io-app2/src/obj.txt"));
+
+    // 3、直接调用序列化方法
+    oos.writeObject(s);
+
+    // 4、释放资源
+    oos.close();
+    System.out.println("序列化完成了~~");
+
+}
+```
+
+```java
+import java.io.Serializable;
+
+/**
+  对象如果要序列化，必须实现Serializable序列化接口。
+ */
+public class Student implements Serializable {
+    // 申明序列化的版本号码
+    // 序列化的版本号与反序列化的版本号必须一致才不会出错！
+    private static final long serialVersionUID = 1;
+    private String name;
+    private String loginName;
+    // transient修饰的成员变量不参与序列化了
+    private transient String passWord;
+    private int age ;
+
+    public Student(){
+    }
+
+    public Student(String name, String loginName, String passWord, int age) {
+        this.name = name;
+        this.loginName = loginName;
+        this.passWord = passWord;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+...
+    @Override
+    public String toString() {
+        return "Student{" +
+                "name='" + name + '\'' +
+                ", loginName='" + loginName + '\'' +
+                ", passWord='" + passWord + '\'' +
+                ", age=" + age +
+                '}';
+    }
+}
+```
+
+
+
+
+
+## 对象反序列化
+
+使用到的流是对象字节输入流：**ObjectInputStream**
+
+**作用：**以内存为基准，把存储到磁盘文件中去的对象数据恢复成内存中的对象，称为对象反序列化。
+
+| 构造器                                    | 说明                                       |
+| ----------------------------------------- | ------------------------------------------ |
+| public ObjectInputStream(InputStream out) | 把低级字节输如流包装成高级的对象字节输入流 |
+
+ObjectInputStream反序列化方法
+
+| 方法名称                   | 说明                                                 |
+| -------------------------- | ---------------------------------------------------- |
+| public Object readObject() | 把存储到磁盘文件中去的对象数据恢复成内存中的对象返回 |
+
+**对象反序列化的含义是什么？**
+
+- 把磁盘中的对象数据恢复到内存的Java对象中。
+
+**对象反序列化用到了哪个流？**
+
+- 对象字节输入流ObjectInputStram
+- public Object readObject()
+
+```java
+public static void main(String[] args) throws Exception {
+    // 1、创建对象字节输入流管道包装低级的字节输入流管道
+    ObjectInputStream is = new ObjectInputStream(new FileInputStream("io-app2/src/obj.txt"));
+
+    // 2、调用对象字节输入流的反序列化方法
+    Student s = (Student) is.readObject();
+
+    System.out.println(s);
+}
+```
+
+
+
+# 打印流
+
+![](\image\PrintStream.png)
+
+**作用**：打印流可以实现方便、高效的打印数据到文件中去。打印流一般是指：PrintStream，PrintWriter两个类。
+
+可以实现打印什么数据就是什么数据，例如打印整数97写出去就是97，打印boolean的true，写出去就是true。
+
+## PrintStream
+
+| 构造器                              | 说明                         |
+| ----------------------------------- | ---------------------------- |
+| public PrintStream(OutputStream os) | 打印流直接通向字节输出流管道 |
+| public PrintStream(File f)          | 打印流直接通向文件对象       |
+| public PrintStream(String filepath) | 打印流直接通向文件路径       |
+
+| 方法                      | 说明                   |
+| ------------------------- | ---------------------- |
+| public void print(Xxx xx) | 打印任意类型的数据出去 |
+
+## PrintWriter
+
+| 构造器                               | 说明                         |
+| ------------------------------------ | ---------------------------- |
+| public PrintWriter(OutputStream os)  | 打印流直接通向字节输出流管道 |
+| public PrintWriter (Writer w)        | 打印流直接通向字符输出流管道 |
+| public PrintWriter (File f)          | 打印流直接通向文件对象       |
+| public PrintWriter (String filepath) | 打印流直接通向文件路径       |
+
+| 方法                      | 说明                   |
+| ------------------------- | ---------------------- |
+| public void print(Xxx xx) | 打印任意类型的数据出去 |
+
+```java
+public static void main(String[] args) throws Exception {
+    // 1、创建一个打印流对象
+    //PrintStream ps = new PrintStream(new FileOutputStream("io-app2/src/ps.txt"));
+    //PrintStream ps = new PrintStream(new FileOutputStream("io-app2/src/ps.txt" , true)); // 追加数据，在低级管道后面加True
+    //PrintStream ps = new PrintStream("io-app2/src/ps.txt" );
+    PrintWriter ps = new PrintWriter("io-app2/src/ps.txt"); // 打印功能上与PrintStream的使用没有区别
+
+    ps.println(97);
+    ps.println('a');
+    ps.println(23.3);
+    ps.println(true);
+    ps.println("我是打印流输出的，我是啥就打印啥");
+
+    ps.close();
+}
+```
+
+
+
+
+
+**PrintStream和PrintWriter的区别**
+
+1. 打印数据功能上是一模一样的，都是使用方便，性能高效（核心优势）
+2. PrintStream继承自字节输出流OutputStream，支持写字节数据的方法。
+3. PrintWriter继承自字符输出流Writer，支持写字符数据出去。
+
+**打印流有几种？各有什么特点？**
+
+- 打印流一般是指：PrintStream，PrintWriter两个类。
+- 打印功能2者是一样的使用方式
+- PrintStream继承自字节输出流OutputStream，支持写字节
+- PrintWrite继承自字符输出流Writer，支持写字符
+
+**打印流的优势是什么？**
+
+- 两者在打印功能上都是使用方便，性能高效（核心优势）
+
+## 输出语句的重定向
+
+属于打印流的一种应用，可以把输出语句的打印位置改到文件。
+
+```java
+PrintStream ps = new PrintStream("文件地址")
+System.setOut(ps);
+```
+
+把输入到终端的数据输入到文件中
+
+```java
+public static void main(String[] args) throws Exception {
+    System.out.println("锦瑟无端五十弦");
+    System.out.println("一弦一柱思华年");
+
+    // 改变输出语句的位置（重定向）
+    PrintStream ps = new PrintStream("io-app2/src/log.txt");
+    System.setOut(ps); // 把系统打印流改成我们自己的打印流
+
+    System.out.println("庄生晓梦迷蝴蝶");
+    System.out.println("望帝春心托杜鹃");
+}
+```
+
+
+
+# 补充知识：Properties
+
+Properties属性集对象
+
+- 其实就是一个Map集合，但是我们一般不会当集合使用，因为HashMap更好用。
+
+
+Properties核心作用：
+
+- Properties代表的是一个属性文件，可以把自己对象中的键值对信息存入到一个属性文件中去。
+- 属性文件：后缀是.properties结尾的文件,里面的内容都是 key=value，后续做系统配置信息的。
+
+**Properties的API:**
+
+- Properties和IO流结合的方法：
+
+| 构造器                                              | 说明                                                         |
+| --------------------------------------------------- | ------------------------------------------------------------ |
+| void load(InputStream inStream)                     | 从输入字节流读取属性列表（键和元素对）                       |
+| void load(Reader reader)                            | 从输入字符流读取属性列表（键和元素对）                       |
+| void store(OutputStream out, String comments)       | 将此属性列表（键和元素对）写入此 Properties表中，以适合于使用 load(InputStream)方法的格式写入输出字节流 |
+| void store(Writer writer, String comments)          | 将此属性列表（键和元素对）写入此 Properties表中，以适合使用 load(Reader)方法的格式写入输出字符流 |
+| public Object setProperty(String key, String value) | 保存键值对（put）                                            |
+| public String getProperty(String key)               | 使用此属性列表中指定的键搜索属性值 (get)                     |
+| public Set<String> stringPropertyNames()            | 所有键的名称的集合 (keySet())                                |
+
+Properties的作用？
+
+- 可以存储Properties属性集的键值对数据到属性文件中去：
+  - void store(Writer writer, String comments)
+- 可以加载属性文件中的数据到Properties对象中来：
+  - void load(Reader reader)
+
+```java
+大家在后期学的很多大型框架技术中，属性文件都是很重要的系统配置文件。
+    users.properties
+            admin=123456
+            dlei=dlei
+
+ 需求：使用Properties对象生成一个属性文件，里面存入用户名和密码信息。
+```
+
+```java
+public static void main(String[] args) throws Exception {
+    // 需求：使用Properties把键值对信息存入到属性文件中去。
+    Properties properties = new Properties();
+    properties.setProperty("admin", "123456");
+    properties.setProperty("dlei", "003197");
+    properties.setProperty("heima", "itcast");
+    System.out.println(properties);
+
+    /**
+       参数一：保存管道 字符输出流管道
+       参数二：保存心得
+     */
+    properties.store(new FileWriter("io-app2/src/users.properties")
+                     , "this is users!! i am very happy! give me 100!");
+
+}
+```
+
+```
+文件名：users.properties
+
+#this is users!! i am very happy! give me 100!
+#Sat Aug 14 16:21:04 CST 2021
+dlei=003197
+admin=123456
+heima=itcast
+
+```
+
+```java
+public static void main(String[] args) throws Exception {
+    // 需求：Properties读取属性文件中的键值对信息。（读取）
+    Properties properties = new Properties();
+    System.out.println(properties);
+
+    // 加载属性文件中的键值对数据到属性对象properties中去
+    properties.load(new FileReader("io-app2/src/users.properties"));
+
+    System.out.println(properties);
+    String rs = properties.getProperty("dlei");
+    System.out.println(rs);
+    String rs1 = properties.getProperty("admin");
+    System.out.println(rs1);
+}
+```
+
+
+
+
+
+# 补充知识： IO框架
+
+commons-io概述
+
+- commons-io是apache开源基金组织提供的一组有关IO操作的类库，可以提高IO功能开发的效率。
+- commons-io工具包提供了很多有关io操作的类。有两个主要的类FileUtils, IOUtils
+
+FileUtils主要有如下方法:
+
+| 方法名                                                   | 说明                         |
+| -------------------------------------------------------- | ---------------------------- |
+| String readFileToString(File file, String encoding)      | 读取文件中的数据, 返回字符串 |
+| void copyFile(File srcFile, File destFile)               | 复制文件。                   |
+| void copyDirectoryToDirectory(File srcDir, File destDir) | 复制文件夹。                 |
+
+**导入commons-io-2.6.jar做开发**
+
+需求
+
+- 使用commons-io简化io流读写
+
+分析
+
+1. 在项目中创建一个文件夹：lib
+2. 将commons-io-2.6.jar文件复制到lib文件夹
+3. 在jar文件上点右键，选择 Add as Library -> 点击OK
+4. 在类中导包使用
+
+| 包   | 功能描述 |
+| ---- | :------- |
+| org.apache.commons.io               | 有关Streams、Readers、Writers、Files的工具类 |
+| org.apache.commons.io.input         | 输入流相关的实现类，包含Reader和InputStream  |
+| org.apache.commons.io.output        | 输出流相关的实现类，包含Writer和OutputStream |
+| org.apache.commons.io.serialization | 序列化相关的类
+
+```java
+import org.apache.commons.io.FileUtils;
+import java.io.File;
+
+/**
+    目标:Commons-io包的使用介绍。
+
+    什么是Commons-io包？
+            commons-io是apache开源基金组织提供的一组有关IO操作的类库，
+            可以挺提高IO功能开发的效率。commons-io工具包提供了很多有关io操作的类，
+
+    见上表：
+         
+    步骤：
+         1. 下载commons-io相关jar包；http://commons.apache.org/proper/commons-io/
+         2. 把commons-io-2.6.jar包复制到指定的Module的lib目录中
+         3. 将commons-io-2.6.jar加入到classpath中
+
+    小结：
+         IOUtils和FileUtils可以方便的复制文件和文件夹！！
+ */
+public class CommonsIODemo01 {
+    public static void main(String[] args) throws Exception {
+
+////        // 1.完成文件复制！
+//        IOUtils.copy(new FileInputStream("D:\\resources\\hushui.jpeg"),
+//                new FileOutputStream("D:\\resources\\hushui2.jpeg"));
+
+
+////        // 2.完成文件复制到某个文件夹下！
+//        FileUtils.copyFileToDirectory(new File("D:\\resources\\hushui.jpeg"), new File("D:/"));
+
+
+          // 3.完成文件夹复制到某个文件夹下！
+//          FileUtils.copyDirectoryToDirectory(new File("D:\\resources") , new File("D:\\new"));
+//           FileUtils.deleteDirectory(new File("D:\\new"));
+
+         // JDK1.7 自己也做了一些一行代码完成复制的操作:New IO的技术
+         // Files.copy(Path.of("D:\\resources\\hushui.jpeg"), Path.of("D:\\resources\\hushui3.jpeg"));
+
+        FileUtils.deleteDirectory(new File("D:\\new"));
+    }
+}
+
 ```
 
