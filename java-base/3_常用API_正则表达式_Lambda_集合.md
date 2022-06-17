@@ -1,5 +1,10 @@
 [TOC]
 
+# 什么是API?
+
+- API(Application Programming interface)  应用程序编程接口。
+- 简单来说：就是Java帮我们已经写好的一些方法，我们直接拿过来用就可以了。
+
 # Object类的常用方法
 
 | 方法名                          |                             说明                             |
@@ -8,11 +13,13 @@
 | public boolean equals(Object o) | 默认是比较当前对象与另一个对象的地址是否相同，相同返回true，不同返回false |
 
 toString存在的意义：
-父类toString()方法存在的意义就是为了被子类重写，以便返回对象的内容信息，而不是地址信息！！
+
+- 父类toString()方法存在的意义就是为了被子类重写，以便返回对象的内容信息，而不是地址信息！！
 
 直接比较两个对象的地址是否相同完全可以用“==”替代equals。
 equals存在的意义:
-父类equals方法存在的意义就是为了被子类重写，以便子类自己来定制比较规则。
+
+- 父类equals方法存在的意义就是为了被子类重写，以便子类自己来定制比较规则。
 
 
 
@@ -42,7 +49,8 @@ public static boolean equals(Object a, Object b)
 # StringBuilder概述
 
 StringBuilder是一个可变的字符串类，我们可以把它看成是一个对象容器。
-作用：提高字符串的操作效率，如拼接、修改等。
+
+**作用：**提高字符串的操作效率，如拼接、修改等。
 
 StringBuilder 构造器
 
